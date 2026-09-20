@@ -1,451 +1,1862 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>AI Video Creator</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
+```
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                     "SF Pro Text", Arial, sans-serif;
+    }
+
+    :root {
+        --bg: #000000;
+        --card: rgba(28, 28, 30, 0.82);
+        --card-light: rgba(44, 44, 46, 0.75);
+        --border: rgba(255,255,255,0.09);
+        --text: #f5f5f7;
+        --secondary: #98989f;
+        --blue: #0a84ff;
+        --blue-light: #64b5ff;
+        --green: #30d158;
+    }
+
+    body {
+        background:
+            radial-gradient(circle at 50% -10%, #202040 0%, #000 45%);
+        color: var(--text);
+        min-height: 100vh;
+        letter-spacing: -0.1px;
+    }
+
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        height: 72px;
+        padding: 0 28px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        background: rgba(0,0,0,0.72);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .language-button {
+        border: 1px solid var(--border);
+        background: rgba(44,44,46,0.8);
+        color: var(--text);
+
+        padding: 9px 15px;
+        border-radius: 999px;
+
+        cursor: pointer;
+        font-size: 14px;
+
+        transition: 0.2s;
+    }
+
+    .language-button:hover {
+        background: rgba(70,70,72,0.9);
+    }
+
+    main {
+        width: min(1050px, calc(100% - 30px));
+        margin: 45px auto 80px;
+    }
+
+    .hero {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .hero h1 {
+        font-size: clamp(32px, 5vw, 52px);
+        font-weight: 800;
+        letter-spacing: -2px;
+        margin-bottom: 12px;
+    }
+
+    .hero p {
+        color: var(--secondary);
+        font-size: 17px;
+    }
+
+    .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 25px;
+        margin-bottom: 18px;
+
+        box-shadow:
+            0 20px 50px rgba(0,0,0,0.25);
+
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+    }
+
+    .section-title {
+        font-size: 19px;
+        margin-bottom: 18px;
+        font-weight: 700;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 9px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 180px;
+
+        background: rgba(0,0,0,0.38);
+        color: var(--text);
+
+        border: 1px solid var(--border);
+        border-radius: 17px;
+
+        padding: 16px;
+        font-size: 16px;
+        line-height: 1.7;
+
+        resize: vertical;
+        outline: none;
+
+        transition: 0.2s;
+    }
+
+    textarea:focus {
+        border-color: rgba(10,132,255,0.75);
+        box-shadow: 0 0 0 3px rgba(10,132,255,0.12);
+    }
+
+    textarea::placeholder {
+        color: #77777d;
+    }
+
+    .hint {
+        color: var(--secondary);
+        font-size: 13px;
+        margin-top: 9px;
+    }
+
+    .settings {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .setting-box {
+        min-width: 0;
+    }
+
+    select {
+        width: 100%;
+        padding: 14px 15px;
+
+        background: rgba(0,0,0,0.42);
+        color: var(--text);
+
+        border: 1px solid var(--border);
+        border-radius: 15px;
+
+        font-size: 15px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    select:focus {
+        border-color: rgba(10,132,255,0.75);
+    }
+
+    /* Cards */
+
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .option-card {
+        min-height: 82px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        gap: 5px;
+
+        padding: 10px;
+
+        background: rgba(0,0,0,0.32);
+        border: 1px solid var(--border);
+        border-radius: 17px;
+
+        cursor: pointer;
+        user-select: none;
+
+        transition:
+            transform 0.18s,
+            background 0.18s,
+            border 0.18s;
+    }
+
+    .option-card:hover {
+        transform: translateY(-2px);
+        background: rgba(55,55,58,0.6);
+    }
+
+    .option-card.selected {
+        background: rgba(10,132,255,0.16);
+        border-color: rgba(10,132,255,0.85);
+        box-shadow:
+            inset 0 0 0 1px rgba(10,132,255,0.35),
+            0 6px 20px rgba(10,132,255,0.08);
+    }
+
+    .option-icon {
+        font-size: 23px;
+    }
+
+    .option-name {
+        font-size: 13px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .option-description {
+        color: var(--secondary);
+        font-size: 10px;
+        text-align: center;
+    }
+
+    /* Voice */
+
+    .voice-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 13px;
+        flex-wrap: wrap;
+    }
+
+    .voice-tab {
+        padding: 10px 16px;
+
+        background: rgba(0,0,0,0.32);
+        color: var(--secondary);
+
+        border: 1px solid var(--border);
+        border-radius: 999px;
+
+        cursor: pointer;
+        font-size: 13px;
+
+        transition: 0.2s;
+    }
+
+    .voice-tab.active {
+        background: rgba(10,132,255,0.18);
+        color: #fff;
+        border-color: rgba(10,132,255,0.75);
+    }
+
+    .voice-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 9px;
+    }
+
+    .voice-card {
+        background: rgba(0,0,0,0.32);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+
+        padding: 14px 7px;
+        text-align: center;
+
+        cursor: pointer;
+        transition: 0.18s;
+    }
+
+    .voice-card:hover {
+        background: rgba(55,55,58,0.6);
+    }
+
+    .voice-card.selected {
+        background: rgba(10,132,255,0.16);
+        border-color: rgba(10,132,255,0.85);
+    }
+
+    .voice-number {
+        color: var(--secondary);
+        font-size: 10px;
+        margin-bottom: 4px;
+    }
+
+    .voice-name {
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* Toggle */
+
+    .toggle-row {
+        min-height: 54px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        background: rgba(0,0,0,0.32);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+
+        padding: 12px 15px;
+    }
+
+    .toggle {
+        position: relative;
+        width: 51px;
+        height: 31px;
+        flex-shrink: 0;
+    }
+
+    .toggle input {
+        display: none;
+    }
+
+    .slider {
+        position: absolute;
+        inset: 0;
+
+        background: #39393d;
+        border-radius: 999px;
+
+        cursor: pointer;
+        transition: 0.25s;
+    }
+
+    .slider:before {
+        content: "";
+
+        position: absolute;
+        width: 27px;
+        height: 27px;
+
+        top: 2px;
+        left: 2px;
+
+        background: white;
+        border-radius: 50%;
+
+        box-shadow: 0 2px 5px rgba(0,0,0,0.35);
+
+        transition: 0.25s;
+    }
+
+    .toggle input:checked + .slider {
+        background: var(--green);
+    }
+
+    .toggle input:checked + .slider:before {
+        transform: translateX(20px);
+    }
+
+    /* Range */
+
+    .range-container {
+        background: rgba(0,0,0,0.32);
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        padding: 15px;
+    }
+
+    input[type="range"] {
+        width: 100%;
+        accent-color: var(--blue);
+        cursor: pointer;
+    }
+
+    .range-value {
+        text-align: center;
+        margin-top: 8px;
+        color: var(--secondary);
+        font-size: 13px;
+    }
+
+    /* Shorts */
+
+    .shorts-settings {
+        margin-top: 13px;
+        display: none;
+    }
+
+    .shorts-settings.show {
+        display: block;
+    }
+
+    /* Generate */
+
+    .generate {
+        width: 100%;
+
+        padding: 17px;
+
+        border: none;
+        border-radius: 17px;
+
+        background: var(--blue);
+        color: white;
+
+        font-size: 17px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 10px 30px rgba(10,132,255,0.22);
+
+        transition: 0.2s;
+    }
+
+    .generate:hover {
+        background: #168cff;
+        transform: translateY(-1px);
+    }
+
+    .generate:active {
+        transform: scale(0.99);
+    }
+
+    /* Summary */
+
+    .summary {
+        margin-top: 15px;
+
+        background: rgba(0,0,0,0.35);
+        border: 1px solid var(--border);
+        border-radius: 17px;
+
+        padding: 17px;
+
+        display: none;
+
+        color: #d7d7dc;
+        line-height: 1.9;
+        font-size: 14px;
+    }
+
+    .summary.show {
+        display: block;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 850px) {
+
+        .options-grid {
+            grid-template-columns: repeat(3, 1fr);
         }
 
-        body {
-            background: #0f172a;
-            color: white;
-            min-height: 100vh;
+        .voice-grid {
+            grid-template-columns: repeat(3, 1fr);
         }
+    }
+
+    @media (max-width: 600px) {
 
         header {
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #334155;
+            height: 64px;
+            padding: 0 15px;
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .language-button {
-            background: #1e293b;
-            color: white;
-            border: 1px solid #475569;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
+            font-size: 17px;
         }
 
         main {
-            max-width: 900px;
-            margin: 60px auto;
-            padding: 20px;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .hero h1 {
-            font-size: 42px;
-            margin-bottom: 15px;
-        }
-
-        .hero p {
-            color: #94a3b8;
-            font-size: 18px;
+            width: min(100% - 18px, 550px);
+            margin-top: 25px;
         }
 
         .card {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 16px;
-            padding: 30px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 180px;
-            resize: vertical;
-            background: #0f172a;
-            color: white;
-            border: 1px solid #475569;
-            border-radius: 10px;
-            padding: 15px;
-            font-size: 16px;
-            margin-bottom: 25px;
+            padding: 18px;
+            border-radius: 21px;
         }
 
         .settings {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 25px;
+            grid-template-columns: 1fr;
         }
 
-        select {
-            width: 100%;
-            padding: 13px;
-            background: #0f172a;
-            color: white;
-            border: 1px solid #475569;
-            border-radius: 10px;
-            font-size: 16px;
+        .options-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        .generate {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 10px;
-            background: #6366f1;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
+        .voice-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        .generate:hover {
-            opacity: 0.9;
+        .hero h1 {
+            font-size: 34px;
         }
 
-        @media (max-width: 600px) {
-            .settings {
-                grid-template-columns: 1fr;
-            }
-
-            .hero h1 {
-                font-size: 30px;
-            }
-
-            main {
-                margin: 30px auto;
-            }
+        .hero p {
+            font-size: 15px;
         }
-    </style>
+    }
+</style>
+```
+
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">🎬 AI Video Creator</div>
+<header>
 
-        <button class="language-button" onclick="changeSiteLanguage()">
-            العربية / English
+```
+<div class="logo">
+    🎬 AI Video Creator
+</div>
+
+<button class="language-button" onclick="changeSiteLanguage()">
+    العربية / English
+</button>
+```
+
+</header>
+
+<main>
+
+```
+<section class="hero">
+
+    <h1>
+        حوّل فكرتك إلى فيديو 🎥
+    </h1>
+
+    <p>
+        اكتب السكريبت أو اتركه فارغًا ودع الذكاء الاصطناعي ينشئه لك
+    </p>
+
+</section>
+
+
+<!-- SCRIPT -->
+
+<section class="card">
+
+    <h2 class="section-title">
+        📝 السكريبت
+    </h2>
+
+    <label for="script">
+        السكريبت (اختياري)
+    </label>
+
+    <textarea
+        id="script"
+        placeholder="اكتب السكريبت هنا أو اترك الخانة فارغة ليقوم الـAI بإنشائه..."
+    ></textarea>
+
+    <div class="hint">
+        🤖 إذا كانت الخانة فارغة، سيقوم الـAI بإنشاء السكريبت تلقائيًا.
+    </div>
+
+</section>
+
+
+<!-- BASIC SETTINGS -->
+
+<section class="card">
+
+    <h2 class="section-title">
+        ⚙️ إعدادات الفيديو الأساسية
+    </h2>
+
+    <div class="settings">
+
+        <div class="setting-box">
+
+            <label for="videoLanguage">
+                🌐 لغة الفيديو
+            </label>
+
+            <select id="videoLanguage">
+
+                <option value="ar">
+                    العربية
+                </option>
+
+                <option value="en">
+                    English
+                </option>
+
+                <option value="ru">
+                    Русский
+                </option>
+
+                <option value="hi">
+                    हिन्दी
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="setting-box">
+
+            <label for="duration">
+                ⏱️ مدة الفيديو
+            </label>
+
+            <select id="duration">
+
+                <option value="30">30 ثانية</option>
+                <option value="60">60 ثانية</option>
+                <option value="90">90 ثانية</option>
+                <option value="120">دقيقتان</option>
+                <option value="300">5 دقائق</option>
+                <option value="600">10 دقائق</option>
+                <option value="900">15 دقيقة</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="setting-box">
+
+            <label for="aspectRatio">
+                📐 مقاس الفيديو
+            </label>
+
+            <select id="aspectRatio">
+
+                <option value="vertical">
+                    عمودي — 9:16
+                </option>
+
+                <option value="horizontal">
+                    أفقي — 16:9
+                </option>
+
+                <option value="square">
+                    مربع — 1:1
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="setting-box">
+
+            <label for="quality">
+                🎬 جودة الفيديو
+            </label>
+
+            <select id="quality">
+
+                <option value="720p">HD — 720p</option>
+                <option value="1080p">Full HD — 1080p</option>
+                <option value="1440p">2K — 1440p</option>
+                <option value="2160p">4K — 2160p</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- VIDEO STYLE -->
+
+<section class="card">
+
+    <h2 class="section-title">
+        📝 أسلوب الفيديو
+    </h2>
+
+    <div class="options-grid">
+
+        <div class="option-card selected" data-value="educational"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">🎓</div>
+            <div class="option-name">تعليمي</div>
+            <div class="option-description">شرح وتبسيط</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="facts"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">🧠</div>
+            <div class="option-name">معلومات وحقائق</div>
+            <div class="option-description">Facts</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="storytelling"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">📖</div>
+            <div class="option-name">قصصي</div>
+            <div class="option-description">Storytelling</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="cinematic"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">🎬</div>
+            <div class="option-name">سينمائي</div>
+            <div class="option-description">Cinematic</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="news"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">📰</div>
+            <div class="option-name">أخبار</div>
+            <div class="option-description">News</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="motivational"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">💡</div>
+            <div class="option-name">تحفيزي</div>
+            <div class="option-description">Motivational</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="comedy"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">😂</div>
+            <div class="option-name">كوميدي</div>
+            <div class="option-description">Comedy</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="horror"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">👻</div>
+            <div class="option-name">رعب وغموض</div>
+            <div class="option-description">Mystery</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="science"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">🔬</div>
+            <div class="option-name">علمي</div>
+            <div class="option-description">Science</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="finance"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">💰</div>
+            <div class="option-name">مالي</div>
+            <div class="option-description">Finance</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="history"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">🌍</div>
+            <div class="option-name">تاريخي</div>
+            <div class="option-description">History</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="puzzles"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">🧩</div>
+            <div class="option-name">ألغاز</div>
+            <div class="option-description">Puzzles</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="technology"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">🚀</div>
+            <div class="option-name">تكنولوجيا</div>
+            <div class="option-description">Technology</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="explainer"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">🧑‍🏫</div>
+            <div class="option-name">شرح وتبسيط</div>
+            <div class="option-description">Explainer</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="social"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">📱</div>
+            <div class="option-name">سوشيال ميديا</div>
+            <div class="option-description">Social</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="documentary"
+             onclick="selectOption(this,'videoStyle')">
+
+            <div class="option-icon">🎥</div>
+            <div class="option-name">وثائقي</div>
+            <div class="option-description">Documentary</div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- EDITING STYLE -->
+
+<section class="card">
+
+    <h2 class="section-title">
+        ✂️ نوع المونتاج
+    </h2>
+
+    <div class="options-grid">
+
+        <div class="option-card selected" data-value="fast"
+             onclick="selectOption(this,'editingStyle')">
+
+            <div class="option-icon">⚡</div>
+            <div class="option-name">سريع وحماسي</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="cinematic"
+             onclick="selectOption(this,'editingStyle')">
+
+            <div class="option-icon">🎞️</div>
+            <div class="option-name">سينمائي</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="quickcuts"
+             onclick="selectOption(this,'editingStyle')">
+
+            <div class="option-icon">✂️</div>
+            <div class="option-name">Cuts سريعة</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="clean"
+             onclick="selectOption(this,'editingStyle')">
+
+            <div class="option-icon">🧼</div>
+            <div class="option-name">بسيط ونظيف</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="trending"
+             onclick="selectOption(this,'editingStyle')">
+
+            <div class="option-icon">🔥</div>
+            <div class="option-name">ترند / Social</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="documentary"
+             onclick="selectOption(this,'editingStyle')">
+
+            <div class="option-icon">📰</div>
+            <div class="option-name">وثائقي</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="dramatic"
+             onclick="selectOption(this,'editingStyle')">
+
+            <div class="option-icon">🎭</div>
+            <div class="option-name">درامي</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="creative"
+             onclick="selectOption(this,'editingStyle')">
+
+            <div class="option-icon">🎨</div>
+            <div class="option-name">إبداعي</div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- SCENE STYLE -->
+
+<section class="card">
+
+    <h2 class="section-title">
+        🖼️ أسلوب الصور / المشاهد
+    </h2>
+
+    <div class="options-grid">
+
+        <div class="option-card selected" data-value="realistic"
+             onclick="selectOption(this,'sceneStyle')">
+
+            <div class="option-icon">📷</div>
+            <div class="option-name">واقعي</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="cinematic"
+             onclick="selectOption(this,'sceneStyle')">
+
+            <div class="option-icon">🎬</div>
+            <div class="option-name">سينمائي</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="illustration"
+             onclick="selectOption(this,'sceneStyle')">
+
+            <div class="option-icon">🎨</div>
+            <div class="option-name">رسم توضيحي</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="3d"
+             onclick="selectOption(this,'sceneStyle')">
+
+            <div class="option-icon">🧊</div>
+            <div class="option-name">3D</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="anime"
+             onclick="selectOption(this,'sceneStyle')">
+
+            <div class="option-icon">✨</div>
+            <div class="option-name">Anime</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="minimal"
+             onclick="selectOption(this,'sceneStyle')">
+
+            <div class="option-icon">⬜</div>
+            <div class="option-name">Minimal</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="vintage"
+             onclick="selectOption(this,'sceneStyle')">
+
+            <div class="option-icon">📼</div>
+            <div class="option-name">Vintage</div>
+
+        </div>
+
+
+        <div class="option-card" data-value="dynamic"
+             onclick="selectOption(this,'sceneStyle')">
+
+            <div class="option-icon">💥</div>
+            <div class="option-name">Dynamic</div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- VOICE -->
+
+<section class="card">
+
+    <h2 class="section-title">
+        🎙️ الصوت
+    </h2>
+
+    <div class="voice-tabs">
+
+        <button class="voice-tab active"
+                onclick="changeVoiceType('male',this)">
+            👨 أصوات رجال
         </button>
-    </header>
 
-    <main>
+        <button class="voice-tab"
+                onclick="changeVoiceType('female',this)">
+            👩 أصوات نساء
+        </button>
 
-        <section class="hero">
-            <h1>حوّل فكرتك إلى فيديو 🎥</h1>
-            <p>اكتب السكريبت أو اتركه فارغًا واختر إعدادات الفيديو</p>
-        </section>
+        <button class="voice-tab"
+                onclick="changeVoiceType('child',this)">
+            👦 أصوات طفولية
+        </button>
 
-        <section class="card">
+    </div>
 
-            <!-- السكريبت - اختياري -->
-            <label for="script">📝 السكريبت (اختياري)</label>
 
-            <textarea
-                id="script"
-                placeholder="اكتب السكريبت أو اتركه فارغًا..."
-            ></textarea>
+    <div class="voice-grid" id="voiceGrid">
 
-            <div class="settings">
+        <div class="voice-card selected"
+             data-voice="male-1"
+             onclick="selectVoice(this)">
 
-                <!-- لغة الفيديو -->
-                <div>
-                    <label for="videoLanguage">🌐 لغة الفيديو</label>
+            <div class="voice-number">
+                VOICE 01
+            </div>
 
-                    <select id="videoLanguage">
-                        <option value="ar">العربية</option>
-                        <option value="en">English</option>
-                        <option value="ru">Русский</option>
-                        <option value="hi">हिन्दी</option>
-                    </select>
-                </div>
+            <div class="voice-name">
+                رجل 1
+            </div>
 
-                <!-- مدة الفيديو -->
-                <div>
-                    <label for="duration">⏱️ مدة الفيديو</label>
+        </div>
 
-                    <select id="duration">
-                        <option value="30">30 ثانية</option>
-                        <option value="60">60 ثانية</option>
-                        <option value="90">90 ثانية</option>
-                        <option value="120">دقيقتان</option>
-                    </select>
-                </div>
 
-                <!-- نوع الفيديو -->
-                <div>
-                    <label for="videoType">🎬 نوع الفيديو</label>
+        <div class="voice-card"
+             data-voice="male-2"
+             onclick="selectVoice(this)">
 
-                    <select id="videoType">
-                        <option value="long">فيديو طويل</option>
-                        <option value="shorts">YouTube Shorts</option>
-                        <option value="both">فيديو طويل + Shorts</option>
-                    </select>
-                </div>
+            <div class="voice-number">
+                VOICE 02
+            </div>
 
-                <!-- عدد الـ Shorts -->
-                <div>
-                    <label for="shortsCount">🔢 عدد الـ Shorts</label>
+            <div class="voice-name">
+                رجل 2
+            </div>
 
-                    <select id="shortsCount">
-                        <option value="auto">تلقائي</option>
-                        <option value="1">1 Short</option>
-                        <option value="3">3 Shorts</option>
-                        <option value="5">5 Shorts</option>
-                    </select>
-                </div>
+        </div>
 
-                <!-- نوع الصوت -->
-                <div>
-                    <label for="voiceType">🎙️ نوع الصوت</label>
 
-                    <select id="voiceType">
-                        <option value="male">صوت رجل</option>
-                        <option value="female">صوت امرأة</option>
-                    </select>
+        <div class="voice-card"
+             data-voice="male-3"
+             onclick="selectVoice(this)">
+
+            <div class="voice-number">
+                VOICE 03
+            </div>
+
+            <div class="voice-name">
+                رجل 3
+            </div>
+
+        </div>
+
+
+        <div class="voice-card"
+             data-voice="male-4"
+             onclick="selectVoice(this)">
+
+            <div class="voice-number">
+                VOICE 04
+            </div>
+
+            <div class="voice-name">
+                رجل 4
+            </div>
+
+        </div>
+
+
+        <div class="voice-card"
+             data-voice="male-5"
+             onclick="selectVoice(this)">
+
+            <div class="voice-number">
+                VOICE 05
+            </div>
+
+            <div class="voice-name">
+                رجل 5
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div style="margin-top:18px;">
+
+        <label for="voiceSpeed">
+            🗣️ سرعة الصوت
+        </label>
+
+        <select id="voiceSpeed">
+
+            <option value="0.75">
+                0.75x — بطيء
+            </option>
+
+            <option value="1" selected>
+                1x — طبيعي
+            </option>
+
+            <option value="1.25">
+                1.25x — سريع
+            </option>
+
+            <option value="1.5">
+                1.5x — سريع جدًا
+            </option>
+
+            <option value="2">
+                2x — سريع للغاية
+            </option>
+
+        </select>
+
+    </div>
+
+</section>
+
+
+<!-- MUSIC -->
+
+<section class="card">
+
+    <h2 class="section-title">
+        🎵 الموسيقى الخلفية
+    </h2>
+
+    <div class="settings">
+
+        <div>
+
+            <label>
+                🎵 تشغيل الموسيقى
+            </label>
+
+            <div class="toggle-row">
+
+                <span id="musicStatus">
+                    الموسيقى مفعلة
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        id="musicEnabled"
+                        checked
+                        onchange="toggleMusic()"
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <label>
+                🔊 مستوى الموسيقى
+            </label>
+
+            <div class="range-container">
+
+                <input
+                    type="range"
+                    id="musicVolume"
+                    min="0"
+                    max="100"
+                    value="25"
+                    oninput="updateMusicVolume()"
+                >
+
+                <div
+                    class="range-value"
+                    id="musicVolumeValue">
+                    25%
                 </div>
 
             </div>
 
-            <button class="generate" onclick="generateVideo()">
-                🚀 إنشاء الفيديو
-            </button>
+        </div>
 
-        </section>
+    </div>
 
-    </main>
+</section>
 
-    <script>
 
-        function generateVideo() {
+<!-- SHORTS -->
 
-            const script = document.getElementById("script").value.trim();
-            const videoLanguage = document.getElementById("videoLanguage").value;
-            const duration = document.getElementById("duration").value;
-            const videoType = document.getElementById("videoType").value;
-            const shortsCount = document.getElementById("shortsCount").value;
-            const voiceType = document.getElementById("voiceType").value;
+<section class="card">
 
-            const languageNames = {
-                ar: "العربية",
-                en: "English",
-                ru: "Русский",
-                hi: "हिन्दी"
-            };
+    <h2 class="section-title">
+        ✂️ تحويل الفيديو الطويل إلى Shorts
+    </h2>
 
-            const typeNames = {
-                long: "فيديو طويل",
-                shorts: "YouTube Shorts",
-                both: "فيديو طويل + Shorts"
-            };
+    <div class="toggle-row">
 
-            const voiceNames = {
-                male: "صوت رجل",
-                female: "صوت امرأة"
-            };
+        <span>
+            إنشاء Shorts من الفيديو الطويل
+        </span>
 
-            const scriptStatus =
-                script === ""
-                    ? "سيتم إنشاء السكريبت تلقائيًا"
-                    : "تم إدخال سكريبت";
+        <label class="toggle">
 
-            alert(
-                "🎬 جاهز لإنشاء الفيديو!\n\n" +
-                "📝 السكريبت: " + scriptStatus + "\n" +
-                "🌐 اللغة: " + languageNames[videoLanguage] + "\n" +
-                "⏱️ المدة: " + duration + " ثانية\n" +
-                "🎬 النوع: " + typeNames[videoType] + "\n" +
-                "🔢 عدد الـ Shorts: " + shortsCount + "\n" +
-                "🎙️ الصوت: " + voiceNames[voiceType]
+            <input
+                type="checkbox"
+                id="shortsEnabled"
+                onchange="toggleShorts()"
+            >
+
+            <span class="slider"></span>
+
+        </label>
+
+    </div>
+
+
+    <div
+        class="shorts-settings"
+        id="shortsSettings">
+
+        <div class="settings">
+
+            <div>
+
+                <label for="shortsCount">
+                    🔢 عدد الـShorts
+                </label>
+
+                <select id="shortsCount">
+
+                    <option value="1">
+                        1 Short
+                    </option>
+
+                    <option value="3">
+                        3 Shorts
+                    </option>
+
+                    <option value="5" selected>
+                        5 Shorts
+                    </option>
+
+                    <option value="10">
+                        10 Shorts
+                    </option>
+
+                    <option value="auto">
+                        تلقائي
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label for="shortsDuration">
+                    ⏱️ مدة كل Short
+                </label>
+
+                <select id="shortsDuration">
+
+                    <option value="auto">
+                        تلقائي
+                    </option>
+
+                    <option value="30">
+                        30 ثانية
+                    </option>
+
+                    <option value="45">
+                        45 ثانية
+                    </option>
+
+                    <option value="60">
+                        60 ثانية
+                    </option>
+
+                    <option value="90">
+                        90 ثانية
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- GENERATE -->
+
+<section class="card">
+
+    <button
+        class="generate"
+        onclick="generateVideo()">
+
+        🚀 إنشاء الفيديو
+
+    </button>
+
+
+    <div
+        class="summary"
+        id="summary">
+    </div>
+
+</section>
+```
+
+</main>
+
+<script>
+
+    let siteLanguage = "ar";
+
+    let selectedOptions = {
+
+        videoStyle: "educational",
+
+        editingStyle: "fast",
+
+        sceneStyle: "realistic",
+
+        voice: "male-1"
+
+    };
+
+
+    function selectOption(element, group) {
+
+        const parent = element.parentElement;
+
+        parent
+            .querySelectorAll(".option-card")
+            .forEach(card =>
+                card.classList.remove("selected")
             );
-        }
+
+        element.classList.add("selected");
+
+        selectedOptions[group] =
+            element.dataset.value;
+
+    }
 
 
-        let siteLanguage = "ar";
+    function selectVoice(element) {
+
+        document
+            .querySelectorAll(".voice-card")
+            .forEach(card =>
+                card.classList.remove("selected")
+            );
+
+        element.classList.add("selected");
+
+        selectedOptions.voice =
+            element.dataset.voice;
+
+    }
 
 
-        function changeSiteLanguage() {
+    function changeVoiceType(type, button) {
 
-            if (siteLanguage === "ar") {
+        document
+            .querySelectorAll(".voice-tab")
+            .forEach(tab =>
+                tab.classList.remove("active")
+            );
 
-                siteLanguage = "en";
+        button.classList.add("active");
 
-                document.documentElement.lang = "en";
-                document.documentElement.dir = "ltr";
+        const voiceGrid =
+            document.getElementById("voiceGrid");
 
-                document.querySelector(".hero h1").textContent =
-                    "Turn your idea into a video 🎥";
+        const names = {
 
-                document.querySelector(".hero p").textContent =
-                    "Write a script or leave it empty and choose your video settings";
+            male: [
+                "رجل 1",
+                "رجل 2",
+                "رجل 3",
+                "رجل 4",
+                "رجل 5"
+            ],
 
-                document.querySelector(".language-button").textContent =
-                    "العربية / English";
+            female: [
+                "امرأة 1",
+                "امرأة 2",
+                "امرأة 3",
+                "امرأة 4",
+                "امرأة 5"
+            ],
 
-                document.querySelector("label[for='script']").textContent =
-                    "📝 Script (Optional)";
+            child: [
+                "طفل 1",
+                "طفل 2",
+                "طفل 3",
+                "طفل 4",
+                "طفل 5"
+            ]
 
-                document.querySelector("label[for='videoLanguage']").textContent =
-                    "🌐 Video Language";
+        };
 
-                document.querySelector("label[for='duration']").textContent =
-                    "⏱️ Video Duration";
 
-                document.querySelector("label[for='videoType']").textContent =
-                    "🎬 Video Type";
+        voiceGrid.innerHTML = "";
 
-                document.querySelector("label[for='shortsCount']").textContent =
-                    "🔢 Number of Shorts";
 
-                document.querySelector("label[for='voiceType']").textContent =
-                    "🎙️ Voice Type";
+        names[type].forEach(
+            (name, index) => {
 
-                document.getElementById("script").placeholder =
-                    "Write the script or leave it empty...";
+                const voiceId =
+                    type + "-" + (index + 1);
 
-                document.querySelector("#videoType option[value='long']").textContent =
-                    "Long Video";
+                const div =
+                    document.createElement("div");
 
-                document.querySelector("#videoType option[value='shorts']").textContent =
-                    "YouTube Shorts";
+                div.className = "voice-card";
 
-                document.querySelector("#videoType option[value='both']").textContent =
-                    "Long Video + Shorts";
+                if (index === 0) {
 
-                document.querySelector("#shortsCount option[value='auto']").textContent =
-                    "Automatic";
+                    div.classList.add("selected");
 
-                document.querySelector("#shortsCount option[value='1']").textContent =
-                    "1 Short";
+                    selectedOptions.voice =
+                        voiceId;
 
-                document.querySelector("#shortsCount option[value='3']").textContent =
-                    "3 Shorts";
+                }
 
-                document.querySelector("#shortsCount option[value='5']").textContent =
-                    "5 Shorts";
+                div.dataset.voice =
+                    voiceId;
 
-                document.querySelector("#voiceType option[value='male']").textContent =
-                    "Male Voice";
+                div.onclick =
+                    function() {
 
-                document.querySelector("#voiceType option[value='female']").textContent =
-                    "Female Voice";
+                        selectVoice(this);
 
-                document.querySelector("#duration option[value='30']").textContent =
-                    "30 seconds";
+                    };
 
-                document.querySelector("#duration option[value='60']").textContent =
-                    "60 seconds";
 
-                document.querySelector("#duration option[value='90']").textContent =
-                    "90 seconds";
+                div.innerHTML =
 
-                document.querySelector("#duration option[value='120']").textContent =
-                    "2 minutes";
+                    '<div class="voice-number">' +
+                    'VOICE 0' +
+                    (index + 1) +
+                    '</div>' +
 
-                document.querySelector(".generate").textContent =
-                    "🚀 Generate Video";
+                    '<div class="voice-name">' +
+                    name +
+                    '</div>';
 
-            } else {
 
-                siteLanguage = "ar";
+                voiceGrid.appendChild(div);
 
-                document.documentElement.lang = "ar";
-                document.documentElement.dir = "rtl";
-
-                document.querySelector(".hero h1").textContent =
-                    "حوّل فكرتك إلى فيديو 🎥";
-
-                document.querySelector(".hero p").textContent =
-                    "اكتب السكريبت أو اتركه فارغًا واختر إعدادات الفيديو";
-
-                document.querySelector(".language-button").textContent =
-                    "العربية / English";
-
-                document.querySelector("label[for='script']").textContent =
-                    "📝 السكريبت (اختياري)";
-
-                document.querySelector("label[for='videoLanguage']").textContent =
-                    "🌐 لغة الفيديو";
-
-                document.querySelector("label[for='duration']").textContent =
-                    "⏱️ مدة الفيديو";
-
-                document.querySelector("label[for='videoType']").textContent =
-                    "🎬 نوع الفيديو";
-
-                document.querySelector("label[for='shortsCount']").textContent =
-                    "🔢 عدد الـ Shorts";
-
-                document.querySelector("label[for='voiceType']").textContent =
-                    "🎙️ نوع الصوت";
-
-                document.getElementById("script").placeholder =
-                    "اكتب السكريبت أو اتركه فارغًا...";
-
-                document.querySelector("#videoType option[value='long']").textContent =
-                    "فيديو طويل";
-
-                document.querySelector("#videoType option[value='shorts']").textContent =
-                    "YouTube Shorts";
-
-                document.querySelector("#videoType option[value='both']").textContent =
-                    "فيديو طويل + Shorts";
-
-                document.querySelector("#shortsCount option[value='auto']").textContent =
-                    "تلقائي";
-
-                document.querySelector("#shortsCount option[value='1']").textContent =
-                    "1 Short";
-
-                document.querySelector("#shortsCount option[value='3']").textContent =
-                    "3 Shorts";
-
-                document.querySelector("#shortsCount option[value='5']").textContent =
-                    "5 Shorts";
-
-                document.querySelector("#voiceType option[value='male']").textContent =
-                    "صوت رجل";
-
-                document.querySelector("#voiceType option[value='female']").textContent =
-                    "صوت امرأة";
-
-                document.querySelector("#duration option[value='30']").textContent =
-                    "30 ثانية";
-
-                document.querySelector("#duration option[value='60']").textContent =
-                    "60 ثانية";
-
-                document.querySelector("#duration option[value='90']").textContent =
-                    "90 ثانية";
-
-                document.querySelector("#duration option[value='120']").textContent =
-                    "دقيقتان";
-
-                document.querySelector(".generate").textContent =
-                    "🚀 إنشاء الفيديو";
             }
+        );
+
+    }
+
+
+    function toggleMusic() {
+
+        const enabled =
+            document.getElementById(
+                "musicEnabled"
+            ).checked;
+
+        document.getElementById(
+            "musicStatus"
+        ).textContent =
+
+            enabled
+                ? "الموسيقى مفعلة"
+                : "الموسيقى متوقفة";
+
+    }
+
+
+    function updateMusicVolume() {
+
+        const value =
+            document.getElementById(
+                "musicVolume"
+            ).value;
+
+        document.getElementById(
+            "musicVolumeValue"
+        ).textContent =
+            value + "%";
+
+    }
+
+
+    function toggleShorts() {
+
+        const enabled =
+            document.getElementById(
+                "shortsEnabled"
+            ).checked;
+
+        const settings =
+            document.getElementById(
+                "shortsSettings"
+            );
+
+        if (enabled) {
+
+            settings.classList.add("show");
+
+        } else {
+
+            settings.classList.remove("show");
+
         }
 
-    </script>
+    }
+
+
+    function generateVideo() {
+
+        const script =
+            document.getElementById(
+                "script"
+            ).value.trim();
+
+        const videoLanguage =
+            document.getElementById(
+                "videoLanguage"
+            ).value;
+
+        const duration =
+            document.getElementById(
+                "duration"
+            ).value;
+
+        const aspectRatio =
+            document.getElementById(
+                "aspectRatio"
+            ).value;
+
+        const quality =
+            document.getElementById(
+                "quality"
+            ).value;
+
+        const voiceSpeed =
+            document.getElementById(
+                "voiceSpeed"
+            ).value;
+
+        const musicEnabled =
+            document.getElementById(
+                "musicEnabled"
+            ).checked;
+
+        const musicVolume =
+            document.getElementById(
+                "musicVolume"
+            ).value;
+
+        const shortsEnabled =
+            document.getElementById(
+                "shortsEnabled"
+            ).checked;
+
+        const shortsCount =
+            document.getElementById(
+                "shortsCount"
+            ).value;
+
+        const shortsDuration =
+            document.getElementById(
+                "shortsDuration"
+            ).value;
+
+
+        const languageNames = {
+
+            ar: "العربية",
+
+            en: "English",
+
+            ru: "Русский",
+
+            hi: "हिन्दी"
+
+        };
+
+
+        const durationNames = {
+
+            30: "30 ثانية",
+
+            60: "60 ثانية",
+
+            90: "90 ثانية",
+
+            120: "دقيقتان",
+
+            300: "5 دقائق",
+
+            600: "10 دقائق",
+
+            900: "15 دقيقة"
+
+        };
+
+
+        const aspectNames = {
+
+            vertical: "عمودي 9:16",
+
+            horizontal: "أفقي 16:9",
+
+            square: "مربع 1:1"
+
+        };
+
+
+        const voiceNames = {
+
+            "male-1": "رجل 1",
+            "male-2": "رجل 2",
+            "male-3": "رجل 3",
+            "male-4": "رجل 4",
+            "male-5": "رجل 5",
+
+            "female-1": "امرأة 1",
+            "female-2": "امرأة 2",
+            "female-3": "امرأة 3",
+            "female-4": "امرأة 4",
+            "female-5": "امرأة 5",
+
+            "child-1": "طفل 1",
+            "child-2": "طفل 2",
+            "child-3": "طفل 3",
+            "child-4": "طفل 4",
+            "child-5": "طفل 5"
+
+        };
+
+
+        const scriptStatus =
+
+            script === ""
+
+                ? "🤖 سيقوم الـAI بإنشاء السكريبت"
+
+                : "📝 تم إدخال سكريبت جاهز";
+
+
+        const shortsStatus =
+
+            shortsEnabled
+
+                ? "مفعلة — " +
+                  shortsCount +
+                  " Shorts"
+
+                : "غير مفعلة";
+
+
+        const summary =
+            document.getElementById(
+                "summary"
+            );
+
+
+        summary.innerHTML =
+
+            "<strong>🎬 إعدادات الفيديو</strong><br><br>" +
+
+            "📝 السكريبت: " +
+            scriptStatus +
+            "<br>" +
+
+            "🌐 اللغة: " +
+            languageNames[videoLanguage] +
+            "<br>" +
+
+            "⏱️ المدة: " +
+            durationNames[duration] +
+            "<br>" +
+
+            "📐 المقاس: " +
+            aspectNames[aspectRatio] +
+            "<br>" +
+
+            "🎬 الجودة: " +
+            quality +
+            "<br>" +
+
+            "📝 أسلوب الفيديو: " +
+            selectedOptions.videoStyle +
+            "<br>" +
+
+            "✂️ نوع المونتاج: " +
+            selectedOptions.editingStyle +
+            "<br>" +
+
+            "🖼️ أسلوب المشاهد: " +
+            selectedOptions.sceneStyle +
+            "<br>" +
+
+            "🎙️ الصوت: " +
+            voiceNames[selectedOptions.voice] +
+            "<br>" +
+
+            "🗣️ سرعة الصوت: " +
+            voiceSpeed +
+            "x<br>" +
+
+            "🎵 الموسيقى: " +
+
+            (
+                musicEnabled
+                    ? "مفعلة — " +
+                      musicVolume +
+                      "%"
+                    : "متوقفة"
+            ) +
+
+            "<br>" +
+
+            "✂️ Shorts: " +
+            shortsStatus +
+
+            (
+                shortsEnabled
+
+                    ? "<br>⏱️ مدة الـShort: " +
+                      shortsDuration
+
+                    : ""
+            );
+
+
+        summary.classList.add("show");
+
+    }
+
+
+    function changeSiteLanguage() {
+
+        if (siteLanguage === "ar") {
+
+            siteLanguage = "en";
+
+            document.documentElement.lang = "en";
+
+            document.documentElement.dir = "ltr";
+
+            document.querySelector(
+                ".hero h1"
+            ).textContent =
+                "Turn your idea into a video 🎥";
+
+            document.querySelector(
+                ".hero p"
+            ).textContent =
+                "Write a script or leave it empty and let AI create it for you";
+
+        } else {
+
+            siteLanguage = "ar";
+
+            document.documentElement.lang = "ar";
+
+            document.documentElement.dir = "rtl";
+
+            document.querySelector(
+                ".hero h1"
+            ).textContent =
+                "حوّل فكرتك إلى فيديو 🎥";
+
+            document.querySelector(
+                ".hero p"
+            ).textContent =
+                "اكتب السكريبت أو اتركه فارغًا ودع الذكاء الاصطناعي ينشئه لك";
+
+        }
+
+    }
+
+</script>
 
 </body>
 </html>
