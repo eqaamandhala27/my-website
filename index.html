@@ -245,6 +245,7 @@
     const videoLanguage = document.getElementById("videoLanguage").value;
     const duration = document.getElementById("duration").value;
     const videoType = document.getElementById("videoType").value;
+    const shortsCount = document.getElementById("shortsCount").value;  
     const voiceType = document.getElementById("voiceType").value;
 
     if (script === "") {
@@ -258,12 +259,11 @@
         hi: "हिन्दी"
     };
 
-    const typeNames = {
-        shorts: "Shorts",
-        story: "قصة",
-        educational: "تعليمي",
-        facts: "معلومات وحقائق"
-    };
+  const typeNames = {
+    long: "فيديو طويل",
+    shorts: "YouTube Shorts",
+    both: "فيديو طويل + Shorts"
+};
 
     const voiceNames = {
         male: "صوت رجل",
