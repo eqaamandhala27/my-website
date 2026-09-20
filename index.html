@@ -211,9 +211,125 @@
             alert("تم استلام السكريبت! 🚀\nسنربط محرك إنشاء الفيديو في الخطوة القادمة.");
         }
 
-        function changeSiteLanguage() {
-            alert("اختيار لغة الموقع: العربية / English");
-        }
+        let siteLanguage = "ar";
+
+function changeSiteLanguage() {
+
+    if (siteLanguage === "ar") {
+
+        siteLanguage = "en";
+
+        document.documentElement.lang = "en";
+        document.documentElement.dir = "ltr";
+
+        document.querySelector(".logo").textContent = "🎬 AI Video Creator";
+
+        document.querySelector(".language-button").textContent = "العربية / English";
+
+        document.querySelector(".hero h1").textContent =
+            "Turn your idea into a video 🎥";
+
+        document.querySelector(".hero p").textContent =
+            "Write your script, choose the video language, and start creating";
+
+        document.querySelectorAll("label")[0].textContent =
+            "📝 Script";
+
+        document.querySelectorAll("label")[1].textContent =
+            "🌐 Video Language";
+
+        document.querySelectorAll("label")[2].textContent =
+            "⏱️ Video Duration";
+
+        document.getElementById("script").placeholder =
+            "Write the script you want to turn into a video...";
+
+        document.querySelector("#videoLanguage option[value='ar']").textContent =
+            "العربية";
+
+        document.querySelector("#videoLanguage option[value='en']").textContent =
+            "English";
+
+        document.querySelector("#videoLanguage option[value='ru']").textContent =
+            "Русский";
+
+        document.querySelector("#videoLanguage option[value='hi']").textContent =
+            "हिन्दी";
+
+        document.querySelector("#duration option[value='30']").textContent =
+            "30 seconds";
+
+        document.querySelector("#duration option[value='60']").textContent =
+            "60 seconds";
+
+        document.querySelector("#duration option[value='90']").textContent =
+            "90 seconds";
+
+        document.querySelector("#duration option[value='120']").textContent =
+            "2 minutes";
+
+        document.querySelector(".generate").textContent =
+            "🚀 Generate Video";
+
+    } else {
+
+        siteLanguage = "ar";
+
+        document.documentElement.lang = "ar";
+        document.documentElement.dir = "rtl";
+
+        document.querySelector(".logo").textContent =
+            "🎬 AI Video Creator";
+
+        document.querySelector(".language-button").textContent =
+            "العربية / English";
+
+        document.querySelector(".hero h1").textContent =
+            "حوّل فكرتك إلى فيديو 🎥";
+
+        document.querySelector(".hero p").textContent =
+            "اكتب السكريبت واختر لغة الفيديو ثم ابدأ الإنشاء";
+
+        document.querySelectorAll("label")[0].textContent =
+            "📝 السكريبت";
+
+        document.querySelectorAll("label")[1].textContent =
+            "🌐 لغة الفيديو";
+
+        document.querySelectorAll("label")[2].textContent =
+            "⏱️ مدة الفيديو";
+
+        document.getElementById("script").placeholder =
+            "اكتب السكريبت الذي تريد تحويله إلى فيديو...";
+
+        document.querySelector("#videoLanguage option[value='ar']").textContent =
+            "العربية";
+
+        document.querySelector("#videoLanguage option[value='en']").textContent =
+            "English";
+
+        document.querySelector("#videoLanguage option[value='ru']").textContent =
+            "Русский";
+
+        document.querySelector("#videoLanguage option[value='hi']").textContent =
+            "हिन्दी";
+
+        document.querySelector("#duration option[value='30']").textContent =
+            "30 ثانية";
+
+        document.querySelector("#duration option[value='60']").textContent =
+            "60 ثانية";
+
+        document.querySelector("#duration option[value='90']").textContent =
+            "90 ثانية";
+
+        document.querySelector("#duration option[value='120']").textContent =
+            "دقيقتان";
+
+        document.querySelector(".generate").textContent =
+            "🚀 إنشاء الفيديو";
+    }
+}
 
     </script>
 
