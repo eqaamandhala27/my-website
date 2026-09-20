@@ -166,29 +166,49 @@
 
             <div class="settings">
 
-                <div>
-                    <label>🌐 لغة الفيديو</label>
+    <div>
+        <label>🌐 لغة الفيديو</label>
 
-                    <select id="videoLanguage">
-                        <option value="ar">العربية</option>
-                        <option value="en">English</option>
-                        <option value="ru">Русский</option>
-                        <option value="hi">हिन्दी</option>
-                    </select>
-                </div>
+        <select id="videoLanguage">
+            <option value="ar">العربية</option>
+            <option value="en">English</option>
+            <option value="ru">Русский</option>
+            <option value="hi">हिन्दी</option>
+        </select>
+    </div>
 
-                <div>
-                    <label>⏱️ مدة الفيديو</label>
+    <div>
+        <label>⏱️ مدة الفيديو</label>
 
-                    <select id="duration">
-                        <option value="30">30 ثانية</option>
-                        <option value="60">60 ثانية</option>
-                        <option value="90">90 ثانية</option>
-                        <option value="120">دقيقتان</option>
-                    </select>
-                </div>
+        <select id="duration">
+            <option value="30">30 ثانية</option>
+            <option value="60">60 ثانية</option>
+            <option value="90">90 ثانية</option>
+            <option value="120">دقيقتان</option>
+        </select>
+    </div>
 
-            </div>
+    <div>
+        <label>🎬 نوع الفيديو</label>
+
+        <select id="videoType">
+            <option value="shorts">Shorts</option>
+            <option value="story">قصة</option>
+            <option value="educational">تعليمي</option>
+            <option value="facts">معلومات وحقائق</option>
+        </select>
+    </div>
+
+    <div>
+        <label>🎙️ نوع الصوت</label>
+
+        <select id="voiceType">
+            <option value="male">صوت رجل</option>
+            <option value="female">صوت امرأة</option>
+        </select>
+    </div>
+
+</div>
 
             <button class="generate" onclick="generateVideo()">
                 🚀 إنشاء الفيديو
