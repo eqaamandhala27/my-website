@@ -152,83 +152,79 @@
 
         <section class="hero">
             <h1>حوّل فكرتك إلى فيديو 🎥</h1>
-            <p>اكتب السكريبت واختر لغة الفيديو ثم ابدأ الإنشاء</p>
+            <p>اكتب السكريبت أو اتركه فارغًا واختر إعدادات الفيديو</p>
         </section>
 
         <section class="card">
-            
-<div class="form-group">
-    <label for="videoType">نوع الفيديو</label>
 
-    <select id="videoType" name="videoType">
-        <option value="long">فيديو طويل</option>
-        <option value="shorts">YouTube Shorts</option>
-        <option value="both">فيديو طويل + Shorts</option>
-    </select>
-</div>
-            
-  <div class="form-group">
-  <label for="shortsCount">عدد الـ Shorts</label>
-
-  <select id="shortsCount" name="shortsCount">
-    <option value="auto">تلقائي</option>
-    <option value="1">1 Short</option>
-    <option value="3">3 Shorts</option>
-    <option value="5">5 Shorts</option>
-  </select>
-</div>          
-            <label>📝 السكريبت</label>
+            <!-- السكريبت - اختياري -->
+            <label for="script">📝 السكريبت (اختياري)</label>
 
             <textarea
                 id="script"
-                placeholder="اكتب السكريبت الذي تريد تحويله إلى فيديو..."
+                placeholder="اكتب السكريبت أو اتركه فارغًا..."
             ></textarea>
 
             <div class="settings">
 
-    <div>
-        <label>🌐 لغة الفيديو</label>
+                <!-- لغة الفيديو -->
+                <div>
+                    <label for="videoLanguage">🌐 لغة الفيديو</label>
 
-        <select id="videoLanguage">
-            <option value="ar">العربية</option>
-            <option value="en">English</option>
-            <option value="ru">Русский</option>
-            <option value="hi">हिन्दी</option>
-        </select>
-    </div>
+                    <select id="videoLanguage">
+                        <option value="ar">العربية</option>
+                        <option value="en">English</option>
+                        <option value="ru">Русский</option>
+                        <option value="hi">हिन्दी</option>
+                    </select>
+                </div>
 
-    <div>
-        <label>⏱️ مدة الفيديو</label>
+                <!-- مدة الفيديو -->
+                <div>
+                    <label for="duration">⏱️ مدة الفيديو</label>
 
-        <select id="duration">
-            <option value="30">30 ثانية</option>
-            <option value="60">60 ثانية</option>
-            <option value="90">90 ثانية</option>
-            <option value="120">دقيقتان</option>
-        </select>
-    </div>
+                    <select id="duration">
+                        <option value="30">30 ثانية</option>
+                        <option value="60">60 ثانية</option>
+                        <option value="90">90 ثانية</option>
+                        <option value="120">دقيقتان</option>
+                    </select>
+                </div>
 
-    <div>
-        <label>🎬 نوع الفيديو</label>
+                <!-- نوع الفيديو -->
+                <div>
+                    <label for="videoType">🎬 نوع الفيديو</label>
 
-        <select id="videoType">
-            <option value="shorts">Shorts</option>
-            <option value="story">قصة</option>
-            <option value="educational">تعليمي</option>
-            <option value="facts">معلومات وحقائق</option>
-        </select>
-    </div>
+                    <select id="videoType">
+                        <option value="long">فيديو طويل</option>
+                        <option value="shorts">YouTube Shorts</option>
+                        <option value="both">فيديو طويل + Shorts</option>
+                    </select>
+                </div>
 
-    <div>
-        <label>🎙️ نوع الصوت</label>
+                <!-- عدد الـ Shorts -->
+                <div>
+                    <label for="shortsCount">🔢 عدد الـ Shorts</label>
 
-        <select id="voiceType">
-            <option value="male">صوت رجل</option>
-            <option value="female">صوت امرأة</option>
-        </select>
-    </div>
+                    <select id="shortsCount">
+                        <option value="auto">تلقائي</option>
+                        <option value="1">1 Short</option>
+                        <option value="3">3 Shorts</option>
+                        <option value="5">5 Shorts</option>
+                    </select>
+                </div>
 
-</div>
+                <!-- نوع الصوت -->
+                <div>
+                    <label for="voiceType">🎙️ نوع الصوت</label>
+
+                    <select id="voiceType">
+                        <option value="male">صوت رجل</option>
+                        <option value="female">صوت امرأة</option>
+                    </select>
+                </div>
+
+            </div>
 
             <button class="generate" onclick="generateVideo()">
                 🚀 إنشاء الفيديو
@@ -240,165 +236,214 @@
 
     <script>
 
-    function generateVideo() {
-    const script = document.getElementById("script").value.trim();
-    const videoLanguage = document.getElementById("videoLanguage").value;
-    const duration = document.getElementById("duration").value;
-    const videoType = document.getElementById("videoType").value;
-    const shortsCount = document.getElementById("shortsCount").value;  
-    const voiceType = document.getElementById("voiceType").value;
+        function generateVideo() {
 
-    if (script === "") {
-    console.log("لم يتم إدخال سكريبت، سيتم استخدام الإعدادات الأخرى.");
-}
+            const script = document.getElementById("script").value.trim();
+            const videoLanguage = document.getElementById("videoLanguage").value;
+            const duration = document.getElementById("duration").value;
+            const videoType = document.getElementById("videoType").value;
+            const shortsCount = document.getElementById("shortsCount").value;
+            const voiceType = document.getElementById("voiceType").value;
 
-    const languageNames = {
-        ar: "العربية",
-        en: "English",
-        ru: "Русский",
-        hi: "हिन्दी"
-    };
+            const languageNames = {
+                ar: "العربية",
+                en: "English",
+                ru: "Русский",
+                hi: "हिन्दी"
+            };
 
-  const typeNames = {
-    long: "فيديو طويل",
-    shorts: "YouTube Shorts",
-    both: "فيديو طويل + Shorts"
-};
+            const typeNames = {
+                long: "فيديو طويل",
+                shorts: "YouTube Shorts",
+                both: "فيديو طويل + Shorts"
+            };
 
-    const voiceNames = {
-        male: "صوت رجل",
-        female: "صوت امرأة"
-    };
+            const voiceNames = {
+                male: "صوت رجل",
+                female: "صوت امرأة"
+            };
 
-    alert(
-        "🎬 جاهز لإنشاء الفيديو!\n\n" +
-        "🌐 اللغة: " + languageNames[videoLanguage] + "\n" +
-        "⏱️ المدة: " + duration + " ثانية\n" +
-        "🎬 النوع: " + typeNames[videoType] + "\n" +
-        "🔢 عدد الـ Shorts: " + shortsCount + "\n" +
-        "🎙️ الصوت: " + voiceNames[voiceType]
-    );
-}    
+            const scriptStatus =
+                script === ""
+                    ? "سيتم إنشاء السكريبت تلقائيًا"
+                    : "تم إدخال سكريبت";
+
+            alert(
+                "🎬 جاهز لإنشاء الفيديو!\n\n" +
+                "📝 السكريبت: " + scriptStatus + "\n" +
+                "🌐 اللغة: " + languageNames[videoLanguage] + "\n" +
+                "⏱️ المدة: " + duration + " ثانية\n" +
+                "🎬 النوع: " + typeNames[videoType] + "\n" +
+                "🔢 عدد الـ Shorts: " + shortsCount + "\n" +
+                "🎙️ الصوت: " + voiceNames[voiceType]
+            );
+        }
+
 
         let siteLanguage = "ar";
 
-function changeSiteLanguage() {
 
-    if (siteLanguage === "ar") {
+        function changeSiteLanguage() {
 
-        siteLanguage = "en";
+            if (siteLanguage === "ar") {
 
-        document.documentElement.lang = "en";
-        document.documentElement.dir = "ltr";
+                siteLanguage = "en";
 
-        document.querySelector(".logo").textContent = "🎬 AI Video Creator";
+                document.documentElement.lang = "en";
+                document.documentElement.dir = "ltr";
 
-        document.querySelector(".language-button").textContent = "العربية / English";
+                document.querySelector(".hero h1").textContent =
+                    "Turn your idea into a video 🎥";
 
-        document.querySelector(".hero h1").textContent =
-            "Turn your idea into a video 🎥";
+                document.querySelector(".hero p").textContent =
+                    "Write a script or leave it empty and choose your video settings";
 
-        document.querySelector(".hero p").textContent =
-            "Write your script, choose the video language, and start creating";
+                document.querySelector(".language-button").textContent =
+                    "العربية / English";
 
-        document.querySelectorAll("label")[0].textContent =
-            "📝 Script";
+                document.querySelector("label[for='script']").textContent =
+                    "📝 Script (Optional)";
 
-        document.querySelectorAll("label")[1].textContent =
-            "🌐 Video Language";
+                document.querySelector("label[for='videoLanguage']").textContent =
+                    "🌐 Video Language";
 
-        document.querySelectorAll("label")[2].textContent =
-            "⏱️ Video Duration";
+                document.querySelector("label[for='duration']").textContent =
+                    "⏱️ Video Duration";
 
-        document.getElementById("script").placeholder =
-            "Write the script you want to turn into a video...";
+                document.querySelector("label[for='videoType']").textContent =
+                    "🎬 Video Type";
 
-        document.querySelector("#videoLanguage option[value='ar']").textContent =
-            "العربية";
+                document.querySelector("label[for='shortsCount']").textContent =
+                    "🔢 Number of Shorts";
 
-        document.querySelector("#videoLanguage option[value='en']").textContent =
-            "English";
+                document.querySelector("label[for='voiceType']").textContent =
+                    "🎙️ Voice Type";
 
-        document.querySelector("#videoLanguage option[value='ru']").textContent =
-            "Русский";
+                document.getElementById("script").placeholder =
+                    "Write the script or leave it empty...";
 
-        document.querySelector("#videoLanguage option[value='hi']").textContent =
-            "हिन्दी";
+                document.querySelector("#videoType option[value='long']").textContent =
+                    "Long Video";
 
-        document.querySelector("#duration option[value='30']").textContent =
-            "30 seconds";
+                document.querySelector("#videoType option[value='shorts']").textContent =
+                    "YouTube Shorts";
 
-        document.querySelector("#duration option[value='60']").textContent =
-            "60 seconds";
+                document.querySelector("#videoType option[value='both']").textContent =
+                    "Long Video + Shorts";
 
-        document.querySelector("#duration option[value='90']").textContent =
-            "90 seconds";
+                document.querySelector("#shortsCount option[value='auto']").textContent =
+                    "Automatic";
 
-        document.querySelector("#duration option[value='120']").textContent =
-            "2 minutes";
+                document.querySelector("#shortsCount option[value='1']").textContent =
+                    "1 Short";
 
-        document.querySelector(".generate").textContent =
-            "🚀 Generate Video";
+                document.querySelector("#shortsCount option[value='3']").textContent =
+                    "3 Shorts";
 
-    } else {
+                document.querySelector("#shortsCount option[value='5']").textContent =
+                    "5 Shorts";
 
-        siteLanguage = "ar";
+                document.querySelector("#voiceType option[value='male']").textContent =
+                    "Male Voice";
 
-        document.documentElement.lang = "ar";
-        document.documentElement.dir = "rtl";
+                document.querySelector("#voiceType option[value='female']").textContent =
+                    "Female Voice";
 
-        document.querySelector(".logo").textContent =
-            "🎬 AI Video Creator";
+                document.querySelector("#duration option[value='30']").textContent =
+                    "30 seconds";
 
-        document.querySelector(".language-button").textContent =
-            "العربية / English";
+                document.querySelector("#duration option[value='60']").textContent =
+                    "60 seconds";
 
-        document.querySelector(".hero h1").textContent =
-            "حوّل فكرتك إلى فيديو 🎥";
+                document.querySelector("#duration option[value='90']").textContent =
+                    "90 seconds";
 
-        document.querySelector(".hero p").textContent =
-            "اكتب السكريبت واختر لغة الفيديو ثم ابدأ الإنشاء";
+                document.querySelector("#duration option[value='120']").textContent =
+                    "2 minutes";
 
-        document.querySelectorAll("label")[0].textContent =
-            "📝 السكريبت";
+                document.querySelector(".generate").textContent =
+                    "🚀 Generate Video";
 
-        document.querySelectorAll("label")[1].textContent =
-            "🌐 لغة الفيديو";
+            } else {
 
-        document.querySelectorAll("label")[2].textContent =
-            "⏱️ مدة الفيديو";
+                siteLanguage = "ar";
 
-        document.getElementById("script").placeholder =
-            "اكتب السكريبت الذي تريد تحويله إلى فيديو...";
+                document.documentElement.lang = "ar";
+                document.documentElement.dir = "rtl";
 
-        document.querySelector("#videoLanguage option[value='ar']").textContent =
-            "العربية";
+                document.querySelector(".hero h1").textContent =
+                    "حوّل فكرتك إلى فيديو 🎥";
 
-        document.querySelector("#videoLanguage option[value='en']").textContent =
-            "English";
+                document.querySelector(".hero p").textContent =
+                    "اكتب السكريبت أو اتركه فارغًا واختر إعدادات الفيديو";
 
-        document.querySelector("#videoLanguage option[value='ru']").textContent =
-            "Русский";
+                document.querySelector(".language-button").textContent =
+                    "العربية / English";
 
-        document.querySelector("#videoLanguage option[value='hi']").textContent =
-            "हिन्दी";
+                document.querySelector("label[for='script']").textContent =
+                    "📝 السكريبت (اختياري)";
 
-        document.querySelector("#duration option[value='30']").textContent =
-            "30 ثانية";
+                document.querySelector("label[for='videoLanguage']").textContent =
+                    "🌐 لغة الفيديو";
 
-        document.querySelector("#duration option[value='60']").textContent =
-            "60 ثانية";
+                document.querySelector("label[for='duration']").textContent =
+                    "⏱️ مدة الفيديو";
 
-        document.querySelector("#duration option[value='90']").textContent =
-            "90 ثانية";
+                document.querySelector("label[for='videoType']").textContent =
+                    "🎬 نوع الفيديو";
 
-        document.querySelector("#duration option[value='120']").textContent =
-            "دقيقتان";
+                document.querySelector("label[for='shortsCount']").textContent =
+                    "🔢 عدد الـ Shorts";
 
-        document.querySelector(".generate").textContent =
-            "🚀 إنشاء الفيديو";
-    }
-} 
+                document.querySelector("label[for='voiceType']").textContent =
+                    "🎙️ نوع الصوت";
+
+                document.getElementById("script").placeholder =
+                    "اكتب السكريبت أو اتركه فارغًا...";
+
+                document.querySelector("#videoType option[value='long']").textContent =
+                    "فيديو طويل";
+
+                document.querySelector("#videoType option[value='shorts']").textContent =
+                    "YouTube Shorts";
+
+                document.querySelector("#videoType option[value='both']").textContent =
+                    "فيديو طويل + Shorts";
+
+                document.querySelector("#shortsCount option[value='auto']").textContent =
+                    "تلقائي";
+
+                document.querySelector("#shortsCount option[value='1']").textContent =
+                    "1 Short";
+
+                document.querySelector("#shortsCount option[value='3']").textContent =
+                    "3 Shorts";
+
+                document.querySelector("#shortsCount option[value='5']").textContent =
+                    "5 Shorts";
+
+                document.querySelector("#voiceType option[value='male']").textContent =
+                    "صوت رجل";
+
+                document.querySelector("#voiceType option[value='female']").textContent =
+                    "صوت امرأة";
+
+                document.querySelector("#duration option[value='30']").textContent =
+                    "30 ثانية";
+
+                document.querySelector("#duration option[value='60']").textContent =
+                    "60 ثانية";
+
+                document.querySelector("#duration option[value='90']").textContent =
+                    "90 ثانية";
+
+                document.querySelector("#duration option[value='120']").textContent =
+                    "دقيقتان";
+
+                document.querySelector(".generate").textContent =
+                    "🚀 إنشاء الفيديو";
+            }
+        }
 
     </script>
 
