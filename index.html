@@ -220,16 +220,45 @@
 
     <script>
 
-        function generateVideo() {
-            const script = document.getElementById("script").value;
+    function generateVideo() {
+    const script = document.getElementById("script").value.trim();
+    const videoLanguage = document.getElementById("videoLanguage").value;
+    const duration = document.getElementById("duration").value;
+    const videoType = document.getElementById("videoType").value;
+    const voiceType = document.getElementById("voiceType").value;
 
-            if (script.trim() === "") {
-                alert("من فضلك اكتب السكريبت أولاً.");
-                return;
-            }
+    if (script === "") {
+        alert("من فضلك اكتب السكريبت أولاً.");
+        return;
+    }
 
-            alert("تم استلام السكريبت! 🚀\nسنربط محرك إنشاء الفيديو في الخطوة القادمة.");
-        }
+    const languageNames = {
+        ar: "العربية",
+        en: "English",
+        ru: "Русский",
+        hi: "हिन्दी"
+    };
+
+    const typeNames = {
+        shorts: "Shorts",
+        story: "قصة",
+        educational: "تعليمي",
+        facts: "معلومات وحقائق"
+    };
+
+    const voiceNames = {
+        male: "صوت رجل",
+        female: "صوت امرأة"
+    };
+
+    alert(
+        "🎬 جاهز لإنشاء الفيديو!\n\n" +
+        "🌐 اللغة: " + languageNames[videoLanguage] + "\n" +
+        "⏱️ المدة: " + duration + " ثانية\n" +
+        "🎬 النوع: " + typeNames[videoType] + "\n" +
+        "🎙️ الصوت: " + voiceNames[voiceType]
+    );
+}    
 
         let siteLanguage = "ar";
 
@@ -349,7 +378,7 @@ function changeSiteLanguage() {
         document.querySelector(".generate").textContent =
             "🚀 إنشاء الفيديو";
     }
-}
+} 
 
     </script>
 
