@@ -134,8 +134,7 @@ app.post("/api/generate-video", async (req, res) => {
 // START SERVER
 // ========================================
 
-app.listen(PORT, () => {
-
+app.listen(PORT, "0.0.0.0", () => {
     console.log(
         `AI Video Creator Backend running on port ${PORT}`
     );
